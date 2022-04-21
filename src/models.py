@@ -17,3 +17,33 @@ class User(db.Model):
             "email": self.email,
             # do not serialize the password, its a security breach
         }
+
+class People(db.Model):
+    uid = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), unique=True, nullable=False)
+    gender = db.Column(db.String(120), unique=False, nullable=True)
+    height = db.Column(db.Integer, unique=False, nullable=True)
+    mass = db.Column(db.Float, unique=False, nullable=True)
+
+    def serialize(self):
+        return {
+            "uid": self.uid,
+            "name": self.name,
+            "gender": self.gender,
+            "height": self.height,
+            "mass": self.mass,
+        }
+
+class Planetas(db.Model):
+    name = db.Column(db.String, primary_key=True, unique=True)
+    rotation = db.Column(db.Integer, primary_key=False)
+    population = db.Column(db.Integer, primary_key=False)
+    residents = db.Column(db.String, primary_key=False)
+
+    def serialize(self):
+        return {
+            "name": self.name,
+            "rotation": self.rotation,
+            "population": self.population,
+            "residents": self.residents,
+        }
