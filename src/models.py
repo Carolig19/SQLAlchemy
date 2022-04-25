@@ -35,15 +35,44 @@ class People(db.Model):
         }
 
 class Planetas(db.Model):
-    name = db.Column(db.String, primary_key=True, unique=True)
+    pid = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(180), primary_key=False)
     rotation = db.Column(db.Integer, primary_key=False)
     population = db.Column(db.Integer, primary_key=False)
-    residents = db.Column(db.String, primary_key=False)
+    residents = db.Column(db.String(180), primary_key=False)
 
     def serialize(self):
         return {
+            "pid":self.pid,
             "name": self.name,
             "rotation": self.rotation,
             "population": self.population,
             "residents": self.residents,
+        }
+
+class Favpeople(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    uid_people = db.Column(db.Integer, db.ForeignKey('people.uid'))
+    id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    people = db.relationship('People')
+    user = db.relationship('User')
+
+    def serialize(self):
+        return {
+            "uid_people": self.uid_people,
+            "id_user": self.id_user,
+            "id": self.id
+        }
+class Favplanetas(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pid_planetas = db.Column(db.Integer, db.ForeignKey('planetas.pid'))
+    id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    Planetas = db.relationship('Planetas')
+    user = db.relationship('User')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "pid_planetas": self.pid_planetas,
+            "id_user": self.id_user,
         }
